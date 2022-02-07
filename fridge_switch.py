@@ -6,7 +6,7 @@ class FridgeSwitch:
        
     def __init__(self, pin, alarm):
         self.__pin = pin
-        self.__switch = Pin(self.__pin, Pin.IN, Pin.PULL_UP)
+        self.__switch = Pin(self.__pin, Pin.IN, Pin.PULL_DOWN)
         self.__alarm = alarm
         self.__switch.irq(trigger = Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=self.__button_handler)
         self.__timer = Timer()
@@ -15,11 +15,11 @@ class FridgeSwitch:
 
     def __button_handler(self, Pin):
         time.sleep_ms(50)
-        if self.__switch.value():
+        if not self.__switch.value():
            #print(self)
            #print(Pin)
            self.__start_alarm()
-        elif not self.__switch.value():
+        elif self.__switch.value():
            #print(self)
            #print(Pin.value())
            self.__stop_alarm()
